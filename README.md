@@ -7,8 +7,8 @@ Tecnologias
 
 <ul>
 <li>React</li>
-<li>RRedux </li>
-<li>RNode JS</li> 
-<li>RWebpack</li> 
+<li>Redux </li>
+<li>Node JS</li> 
+<li>Webpack</li> 
 <li>Mongo DB</li>
 </ul> 
