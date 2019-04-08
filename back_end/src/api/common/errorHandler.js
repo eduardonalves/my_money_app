@@ -13,6 +13,6 @@ module.exports = (req, res, next) => {
 
 const parseErros = (nodeRestfulErrors) => {
     const errors = []
-    _.for (nodeRestfulErrors, error => errors.push(error.message))
+    _.forIn (nodeRestfulErrors, error => errors.push(error.message))
     return errors 
 }
