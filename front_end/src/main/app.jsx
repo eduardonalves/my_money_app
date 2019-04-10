@@ -12,6 +12,7 @@ import If from '../common/if/if'
 class App extends Component {
     componentWillMount() {
         if (this.props.auth.user) {
+            
             this.props.validateToken(this.props.auth.user.token)
         }
     }

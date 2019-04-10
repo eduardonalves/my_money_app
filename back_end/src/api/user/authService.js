@@ -15,18 +15,22 @@ const sendErrorsFromDB = (res, dbErrors) => {
 const login = (req, res, next) => {
     const email = req.body.email || ''
     const password = req.body.password || ''
+    
     User.findOne({ email }, (err, user) => {
-        if (err) {
-            return sendErrorsFromDB(res, err)
-        } else if (user && bcrypt.compareSync(password, user.password)) {
-            const token = jwt.sign(user, env.authSecret, {
+        
+        if(err){
+            return res.status(400).send({ errors: ['teste aqui2'] })
+        }else if(user && bcrypt.compareSync(password, user.password)){
+            
+            const token = jwt.sign({name:user.name, password:user.password, email:user.email}, env.authSecret, {
                 expiresIn: "1 day"
             })
-            const { name, email } = user
-            res.json({ name, email, token })
-        } else {
+
+            res.json({ name:user.name, email:user.email, token:token })
+        }else{
             return res.status(400).send({ errors: ['Usuário/Senha inválidos'] })
         }
+        
     })
 }
 
@@ -43,6 +47,8 @@ const signup = (req, res, next) => {
     const email = req.body.email || ''
     const password = req.body.password || ''
     const confirmPassword = req.body.confirm_password || ''
+    
+
     if (!email.match(emailRegex)) {
         return res.status(400).send({ errors: ['O e-mail informa está inválido'] })
     }
@@ -53,18 +59,26 @@ const signup = (req, res, next) => {
             ]
         })
     }
+
+    
+
     const salt = bcrypt.genSaltSync()
     const passwordHash = bcrypt.hashSync(password, salt)
     if (!bcrypt.compareSync(confirmPassword, passwordHash)) {
         return res.status(400).send({ errors: ['Senhas não conferem.'] })
     }
+    
     User.findOne({ email }, (err, user) => {
+        
         if (err) {
+            
             return sendErrorsFromDB(res, err)
         } else if (user) {
             return res.status(400).send({ errors: ['Usuário já cadastrado.'] })
+            
         } else {
-            const newUser = new User({ name, email, password: passwordHash })
+            
+            const newUser = new User({ name:name, email:email, password: passwordHash })
             newUser.save(err => {
                 if (err) {
                     return sendErrorsFromDB(res, err)
